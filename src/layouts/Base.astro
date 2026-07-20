@@ -1,0 +1,91 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  lang?: string;
+  dir?: string;
+}
+
+const {
+  title       = 'RPIX — Rezapix | عکاسی هنری و ویدیوگرافی',
+  description = 'پرتفولیو رضاپیکس — عکاس هنری، پرتره، منظره، سیاه و سفید و ویدیو',
+  ogImage     = '/og-default.jpg',
+  lang        = 'fa',
+  dir         = 'rtl',
+} = Astro.props;
+
+const siteURL      = 'https://rpix.top';
+const canonicalURL = new URL(Astro.url.pathname, siteURL).toString();
+
+const jsonLd = JSON.stringify({
+  '@context':    'https://schema.org',
+  '@type':       'Person',
+  name:          'Rezapix',
+  alternateName: 'RPIX',
+  url:           siteURL,
+  image:         `${siteURL}/logo.png`,
+  sameAs:        ['https://instagram.com/rezapix1'],
+  jobTitle:      'Fine Art Photographer',
+  email:         'RpiX1@proton.me',
+  description,
+});
+---
+
+<!DOCTYPE html>
+<html lang={lang} dir={dir}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#060606" />
+  <meta name="robots" content="index, follow" />
+
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalURL} />
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/logo.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content={canonicalURL} />
+  <meta property="og:title"       content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image"       content={siteURL + ogImage} />
+  <meta property="og:site_name"   content="RPIX" />
+  <meta property="og:locale"      content="fa_IR" />
+  <meta property="og:locale:alternate" content="en_US" />
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:site"        content="@rezapix1" />
+  <meta name="twitter:title"       content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image"       content={siteURL + ogImage} />
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json" set:html={jsonLd} />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,700&family=Inter:wght@300;400;500;600&family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
+</head>
+<body>
+  <slot />
+
+  <!-- Cursor spotlight tracker -->
+  <script>
+    document.addEventListener('mousemove', (e) => {
+      document.documentElement.style.setProperty('--cx', e.clientX + 'px');
+      document.documentElement.style.setProperty('--cy', e.clientY + 'px');
+    }, { passive: true });
+  </script>
+</body>
+</html>

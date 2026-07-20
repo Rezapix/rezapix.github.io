@@ -1,17 +1,598 @@
 ---
+import Base from '../layouts/Base.astro';
+import Navbar from '../components/layout/Navbar.astro';
+import Footer from '../components/layout/Footer.astro';
 
+const categories = [
+  {
+    id: 'portrait', fa: 'پرتره', en: 'Portrait',
+    desc: 'روایت بصری از روح انسان در لحظه',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+    isMain: true,
+  },
+  {
+    id: 'landscape', fa: 'منظره', en: 'Landscape',
+    desc: 'طبیعت در قاب‌های سینماتیک',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18L13 7 9 14l-3-3z"/><circle cx="18" cy="8" r="2"/></svg>`,
+  },
+  {
+    id: 'bw', fa: 'سیاه و سفید', en: 'Black & White',
+    desc: 'هنر روایت بدون رنگ',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 3v18" opacity=".4"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" opacity=".15"/></svg>`,
+  },
+  {
+    id: 'video', fa: 'ویدیو', en: 'Video',
+    desc: 'تصویر در جریان زمان',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M15 10l4.553-2.069A1 1 0 0 1 21 8.88v6.24a1 1 0 0 1-1.447.89L15 14"/><rect x="3" y="8" width="12" height="8" rx="2"/></svg>`,
+  },
+];
+
+const skills = ['عکاسی هنری','ویدیوگرافی','تدوین','گریدینگ رنگ','طراحی لوگو','موشن گرافیک'];
+
+const typewriterTexts = [
+  'عکاس هنری',
+  'ویدیوگرافر',
+  'خالق تصویر بصری',
+  'Fine Art Photographer',
+  'Visual Storyteller',
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Base
+  title="RPIX — Rezapix | عکاسی هنری و ویدیوگرافی"
+  description="پرتفولیو رضاپیکس — عکاس هنری، پرتره، منظره، سیاه و سفید و ویدیو از ایران"
+>
+  <Navbar />
+  <main>
+
+    <!-- ████████ HERO ████████ -->
+    <section class="hero" id="home">
+
+      <!-- Aurora blobs -->
+      <div class="aurora" aria-hidden="true">
+        <div class="blob b1"></div>
+        <div class="blob b2"></div>
+        <div class="blob b3"></div>
+      </div>
+
+      <!-- Grid overlay -->
+      <div class="grid-lines" aria-hidden="true"></div>
+
+      <!-- Noise overlay -->
+      <div class="noise" aria-hidden="true"></div>
+
+      <div class="container hero-inner">
+
+        <!-- Logo mark + orbits -->
+        <div class="logo-wrap" aria-hidden="true">
+          <div class="orbit o1"></div>
+          <div class="orbit o2"></div>
+          <img src="/logo.png" alt="" class="hero-logo" width="110" height="110" />
+        </div>
+
+        <!-- Eyebrow -->
+        <div class="eyebrow">
+          <span class="line" aria-hidden="true"></span>
+          <span class="tag">عکاسی هنری</span>
+          <span class="line" aria-hidden="true"></span>
+        </div>
+
+        <!-- Title -->
+        <h1 class="hero-title font-display">
+          REZ<em class="text-red">A</em>PIX
+        </h1>
+
+        <!-- Typewriter subtitle -->
+        <p class="hero-sub" dir="auto">
+          <span id="tw" aria-live="polite"></span><span class="cursor" aria-hidden="true">|</span>
+        </p>
+
+        <!-- CTA buttons -->
+        <div class="hero-ctas">
+          <a href="/portfolio" class="btn btn-primary">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+            پورتفولیو
+          </a>
+          <a href="#contact" class="btn btn-ghost">تماس با من</a>
+        </div>
+
+        <!-- Stats -->
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-n font-display">۴</span>
+            <span class="stat-l">دسته‌بندی</span>
+          </div>
+          <div class="vline" aria-hidden="true"></div>
+          <div class="stat">
+            <span class="stat-n font-display">∞</span>
+            <span class="stat-l">خلاقیت</span>
+          </div>
+          <div class="vline" aria-hidden="true"></div>
+          <div class="stat">
+            <span class="stat-n font-display">۱</span>
+            <span class="stat-l">دیدگاه</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <a href="#portfolio" class="scroll-ind" aria-label="اسکرول به پایین">
+        <div class="scroll-pill"></div>
+      </a>
+    </section>
+
+    <!-- ████████ PORTFOLIO GRID ████████ -->
+    <section class="section" id="portfolio">
+      <div class="container">
+
+        <div class="section-header reveal">
+          <span class="tag">آثار</span>
+          <h2 class="section-title font-display">پورتفولیو</h2>
+          <div class="divider divider-center"></div>
+          <p class="section-desc">هر قاب روایتی‌ست از دیدگاه من به جهان اطراف</p>
+        </div>
+
+        <div class="port-grid">
+          {categories.map((c, i) => (
+            <a
+              href={`/portfolio/${c.id}`}
+              class={`port-card reveal delay-${i+1} ${c.isMain ? 'port-card-main' : ''}`}
+            >
+              <div class="card-icon" set:html={c.icon} />
+              <div class="card-body">
+                <h3 class="card-fa">{c.fa}</h3>
+                <span class="card-en font-en">{c.en}</span>
+                <p class="card-desc">{c.desc}</p>
+              </div>
+              <div class="card-foot">
+                <span class="card-count text-3">به‌زودی</span>
+                <span class="card-arr">→</span>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <div class="port-cta reveal">
+          <a href="/portfolio" class="btn btn-ghost">
+            مشاهده همه آثار
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ████████ ABOUT ████████ -->
+    <section class="section about-sec" id="about">
+      <div class="container">
+        <div class="about-grid">
+
+          <!-- Visual -->
+          <div class="about-vis reveal">
+            <div class="about-ring glass-red">
+              <img src="/logo.png" alt="RPIX" class="about-logo" width="160" height="160" />
+              <div class="about-glow" aria-hidden="true"></div>
+            </div>
+            <div class="available glass">
+              <span class="dot" aria-hidden="true"></span>
+              <span>در دسترس برای پروژه</span>
+            </div>
+          </div>
+
+          <!-- Text -->
+          <div class="about-text reveal delay-2">
+            <span class="tag">درباره من</span>
+            <h2 class="about-title font-display">
+              من <em class="text-red">رضاپیکس</em> هستم
+            </h2>
+            <div class="divider"></div>
+            <p class="about-p">
+              عکاس هنری و ویدیوگراف مستقل — با دیدگاهی سینماتیک و زیبایی‌شناسی ویژه،
+              لحظات را به تصاویر ماندگار تبدیل می‌کنم.
+            </p>
+            <p class="about-p">
+              از پرتره تا منظره، از سیاه‌وسفید تا رنگ — هر کار یک روایت است.
+            </p>
+            <div class="skill-list">
+              {skills.map(s => <span class="skill glass">{s}</span>)}
+            </div>
+            <a href="/about" class="btn btn-primary" style="margin-top:var(--s8)">
+              بیشتر بدانید
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ████████ SOCIAL HUB ████████ -->
+    <section class="section section-sm" id="contact">
+      <div class="container">
+
+        <div class="section-header reveal">
+          <span class="tag">ارتباط</span>
+          <h2 class="section-title font-display">در همه‌جا پیدام کن</h2>
+          <div class="divider divider-center"></div>
+          <p class="section-desc">از هر پلتفرمی که راحت‌تری، دنبالم کن</p>
+        </div>
+
+        <div class="social-hub reveal">
+          <a href="https://instagram.com/rezapix1" target="_blank" rel="noopener" class="soc-card soc-main glass-red">
+            <div class="soc-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </div>
+            <div class="soc-info">
+              <span class="soc-name font-en">Instagram</span>
+              <span class="soc-handle font-en">@rezapix1</span>
+            </div>
+            <span class="soc-arr">↗</span>
+          </a>
+
+          <a href="mailto:RpiX1@proton.me" class="soc-card glass">
+            <div class="soc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" width="22" height="22"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></div>
+            <div class="soc-info">
+              <span class="soc-name font-en">Email</span>
+              <span class="soc-handle font-en">RpiX1@proton.me</span>
+            </div>
+            <span class="soc-arr">↗</span>
+          </a>
+
+          {[
+            { name:'Telegram',  href:'#', svg:`<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>` },
+            { name:'YouTube',   href:'#', svg:`<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>` },
+            { name:'X / Twitter',href:'#',svg:`<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>` },
+            { name:'Behance',   href:'#', svg:`<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 3.211 3.483 3.312 4.588 2.029H23.73zm-7.735-4h4.808c-.309-1.671-1.3-2.289-2.29-2.289-1.143 0-2.232.51-2.518 2.289zm-4.239 2.957c-1.152 1.045-2.633.94-4.105.94H2.04V4h5.314c1.29 0 2.54.087 3.525.803.955.71 1.477 1.918 1.477 3.127 0 1.227-.503 2.42-1.432 3.108-.139.103-.285.185-.432.268.262.097.516.226.751.39 1.11.768 1.724 2.039 1.724 3.315 0 1.315-.633 2.527-1.219 3zm-5.803-9.7H7.83c1.063 0 2.15.187 2.15 1.386 0 1.146-1.038 1.35-2.01 1.35H5.949V6.257zm.001 5.236h2.344c1.158 0 2.344.263 2.344 1.648 0 1.337-1.213 1.587-2.3 1.587H5.95v-3.235z"/></svg>` },
+            { name:'Vimeo',     href:'#', svg:`<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609-3.268 4.247-6.026 6.37-8.29 6.37-1.409 0-2.578-1.294-3.553-3.881L5.322 11.4C4.603 8.816 3.834 7.522 3.01 7.522c-.179 0-.806.378-1.881 1.132L0 7.197a315.065 315.065 0 0 0 3.501-3.128C5.08 2.701 6.266 1.984 7.055 1.91c1.867-.18 3.016 1.1 3.447 3.838.465 2.953.789 4.789.971 5.507.539 2.45 1.131 3.674 1.776 3.674.502 0 1.256-.796 2.265-2.385 1.004-1.589 1.54-2.797 1.612-3.628.144-1.371-.395-2.061-1.612-2.061-.574 0-1.167.121-1.777.391 1.186-3.868 3.434-5.757 6.762-5.637 2.473.06 3.628 1.664 3.478 4.807z"/></svg>` },
+            { name:'Pinterest', href:'#', svg:`<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 0a12 12 0 0 0-4.373 23.178c-.01-.957-.001-2.113.237-3.158l1.72-7.284s-.44-.88-.44-2.18c0-2.043 1.185-3.569 2.658-3.569 1.254 0 1.86.941 1.86 2.07 0 1.261-.804 3.148-1.22 4.894-.347 1.462.734 2.653 2.175 2.653 2.61 0 4.374-3.348 4.374-7.31 0-3.011-2.023-5.262-5.669-5.262-4.125 0-6.697 3.082-6.697 6.506 0 1.18.347 2.012.892 2.664a.375.375 0 0 1 .086.352c-.091.374-.293 1.19-.333 1.356-.054.217-.178.263-.41.16-1.524-.624-2.235-2.302-2.235-4.195 0-3.122 2.638-6.889 7.847-6.889 4.185 0 6.918 3.023 6.918 6.267 0 4.28-2.373 7.458-5.86 7.458-1.172 0-2.277-.633-2.655-1.352l-.743 2.794c-.27 1.005-.795 2.012-1.215 2.787A11.975 11.975 0 0 0 12 24 12 12 0 0 0 12 0z"/></svg>` },
+            { name:'TikTok',    href:'#', svg:`<svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>` },
+          ].map(s => (
+            <a href={s.href} class="soc-card glass" target={s.href !== '#' ? '_blank' : undefined} rel="noopener noreferrer">
+              <div class="soc-icon"><Fragment set:html={s.svg} /></div>
+              <div class="soc-info">
+                <span class="soc-name font-en">{s.name}</span>
+                <span class="soc-handle text-3">{s.href === '#' ? 'به‌زودی' : s.href.replace('https://','')}</span>
+              </div>
+              <span class="soc-arr">↗</span>
+            </a>
+          ))}
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+  <Footer />
+</Base>
+
+<style>
+/* ── HERO ───────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding-top: var(--nav-h);
+}
+.aurora {
+  position: absolute;
+  inset: -50%;
+  z-index: 0;
+  pointer-events: none;
+}
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+}
+.b1 {
+  width: 70%; height: 70%;
+  top: 5%; left: 15%;
+  background: radial-gradient(ellipse, rgba(170,0,0,.20) 0%, transparent 70%);
+  animation: aurora-1 20s ease-in-out infinite;
+}
+.b2 {
+  width: 55%; height: 55%;
+  bottom: 10%; right: 5%;
+  background: radial-gradient(ellipse, rgba(90,0,25,.13) 0%, transparent 70%);
+  animation: aurora-2 26s ease-in-out infinite;
+}
+.b3 {
+  width: 40%; height: 40%;
+  top: 45%; left: 3%;
+  background: radial-gradient(ellipse, rgba(50,0,50,.08) 0%, transparent 70%);
+  animation: aurora-3 30s ease-in-out infinite;
+}
+.grid-lines {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at center, transparent 20%, black 100%);
+}
+.noise {
+  position: absolute; inset: 0; z-index: 1; opacity: .03; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+.hero-inner {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center;
+  gap: var(--s8);
+  padding-block: var(--s20);
+}
+
+/* Logo + orbits */
+.logo-wrap {
+  position: relative;
+  width: 160px; height: 160px;
+  display: flex; align-items: center; justify-content: center;
+  animation: float 7s ease-in-out infinite;
+}
+.hero-logo {
+  width: 110px; height: 110px;
+  object-fit: contain;
+  position: relative; z-index: 2;
+  animation: pulse-red 4s ease-in-out infinite;
+}
+.orbit {
+  position: absolute; border-radius: 50%;
+}
+.o1 {
+  width: 148px; height: 148px;
+  border: 1px dashed rgba(204,0,0,.22);
+  animation: spin-cw 14s linear infinite;
+}
+.o2 {
+  width: 180px; height: 180px;
+  border: 1px solid rgba(255,255,255,.05);
+  animation: spin-ccw 22s linear infinite;
+}
+
+/* Eyebrow */
+.eyebrow {
+  display: flex; align-items: center; gap: var(--s4);
+  animation: fade-up .8s .3s both;
+}
+.line {
+  display: block; width: 36px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--red), transparent);
+}
+
+/* Title */
+.hero-title {
+  font-size: clamp(3.2rem, 10vw, 8.5rem);
+  font-weight: 900;
+  line-height: .92;
+  letter-spacing: -.02em;
+  background: linear-gradient(140deg, #fff 30%, #aaa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: fade-up .8s .5s both;
+}
+.hero-title .text-red { -webkit-text-fill-color: var(--red); }
+
+/* Subtitle typewriter */
+.hero-sub {
+  font-size: var(--xl);
+  color: var(--text-2);
+  letter-spacing: .04em;
+  min-height: 2rem;
+  animation: fade-up .8s .7s both;
+  display: flex; align-items: center; gap: 2px;
+}
+.cursor {
+  color: var(--red);
+  animation: blink 1s step-end infinite;
+  font-weight: 300;
+}
+
+/* CTAs */
+.hero-ctas {
+  display: flex; gap: var(--s4); flex-wrap: wrap; justify-content: center;
+  animation: fade-up .8s .9s both;
+}
+
+/* Stats */
+.hero-stats {
+  display: flex; align-items: center; gap: var(--s8); margin-top: var(--s4);
+  animation: fade-in 1s 1.3s both;
+}
+.stat { text-align: center; }
+.stat-n {
+  display: block; font-size: var(--3xl); font-weight: 700; font-style: italic;
+  color: var(--text-1);
+}
+.stat-l {
+  display: block; font-size: var(--xs); color: var(--text-3);
+  letter-spacing: .12em; text-transform: uppercase; margin-top: var(--s1);
+}
+.vline { width: 1px; height: 36px; background: var(--glass-border); }
+
+/* Scroll indicator */
+.scroll-ind {
+  position: absolute; bottom: var(--s8); left: 50%; transform: translateX(-50%);
+  z-index: 2; animation: fade-in 1s 2s both;
+}
+.scroll-pill {
+  width: 26px; height: 44px;
+  border: 1.5px solid var(--glass-border); border-radius: var(--r-full);
+  position: relative;
+}
+.scroll-pill::after {
+  content: ''; position: absolute;
+  top: 7px; left: 50%; transform: translateX(-50%);
+  width: 4px; height: 9px;
+  background: var(--red); border-radius: var(--r-full);
+  animation: float 2s ease-in-out infinite;
+}
+
+/* ── PORTFOLIO ──────────────────────────── */
+.port-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: var(--s4);
+}
+.port-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-xl);
+  padding: var(--s8);
+  display: flex; flex-direction: column; gap: var(--s4);
+  transition: all var(--t-base);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  text-decoration: none;
+}
+.port-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--red);
+  box-shadow: 0 24px 64px rgba(0,0,0,.3), 0 0 32px rgba(204,0,0,.10);
+}
+.port-card-main {
+  background: var(--glass-red);
+  border-color: var(--glass-red-b);
+}
+.card-icon {
+  width: 48px; height: 48px; color: var(--red);
+}
+.card-icon svg { width: 100%; height: 100%; }
+.card-fa { font-size: var(--xl); font-weight: 600; color: var(--text-1); }
+.card-en {
+  font-size: var(--xs); color: var(--text-3);
+  letter-spacing: .06em; margin-top: var(--s1); display: block;
+  text-align: left;
+}
+.card-desc {
+  font-size: var(--sm); color: var(--text-2);
+  margin-top: var(--s3); line-height: 1.7;
+}
+.card-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: var(--s4); border-top: 1px solid var(--glass-border);
+  margin-top: auto;
+}
+.card-count { font-size: var(--sm); }
+.card-arr {
+  color: var(--red); font-size: var(--lg);
+  transition: transform var(--t-base);
+}
+.port-card:hover .card-arr { transform: translateX(4px); }
+.port-cta { text-align: center; margin-top: var(--s10); }
+
+/* ── ABOUT ──────────────────────────────── */
+.about-sec {
+  background: linear-gradient(180deg, transparent 0%, rgba(204,0,0,.02) 50%, transparent 100%);
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: var(--s16); align-items: center;
+}
+.about-vis {
+  display: flex; flex-direction: column; align-items: center; gap: var(--s6);
+}
+.about-ring {
+  width: 230px; height: 230px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.about-logo { width: 155px; height: 155px; object-fit: contain; }
+.about-glow {
+  position: absolute; inset: -20px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(ellipse, rgba(204,0,0,.14) 0%, transparent 70%);
+}
+.available {
+  display: flex; align-items: center; gap: var(--s2);
+  padding: var(--s2) var(--s5); border-radius: var(--r-full);
+  font-size: var(--sm); color: var(--text-2);
+}
+.dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,.6);
+}
+.about-title {
+  font-size: var(--4xl); font-weight: 700; font-style: italic;
+  color: var(--text-1); margin-top: var(--s4); line-height: 1.2;
+}
+.about-p {
+  font-size: var(--base); color: var(--text-2);
+  line-height: 1.85; margin-bottom: var(--s4);
+}
+.skill-list { display: flex; flex-wrap: wrap; gap: var(--s2); margin-top: var(--s4); }
+.skill {
+  padding: var(--s1) var(--s4); border-radius: var(--r-full);
+  font-size: var(--sm); color: var(--text-2);
+  transition: all var(--t-fast);
+}
+.skill:hover { border-color: var(--red); color: var(--red); }
+
+/* ── SOCIAL HUB ─────────────────────────── */
+.social-hub {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--s3);
+}
+.soc-card {
+  display: flex; align-items: center; gap: var(--s4);
+  padding: var(--s4) var(--s6); border-radius: var(--r-lg);
+  transition: all var(--t-base); text-decoration: none;
+}
+.soc-card:hover {
+  border-color: var(--red);
+  background: var(--glass-red);
+  transform: translateY(-3px);
+}
+.soc-main { }
+.soc-icon {
+  width: 44px; height: 44px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: var(--r-md); background: var(--glass);
+  border: 1px solid var(--glass-border); color: var(--red);
+}
+.soc-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.soc-name { font-size: var(--sm); font-weight: 600; color: var(--text-1); }
+.soc-handle { font-size: var(--xs); color: var(--text-3); }
+.soc-arr {
+  color: var(--text-3); font-size: var(--lg); flex-shrink: 0;
+  transition: all var(--t-fast);
+}
+.soc-card:hover .soc-arr {
+  color: var(--red);
+  transform: translate(2px, -2px);
+}
+
+/* ── RESPONSIVE ─────────────────────────── */
+@media (max-width: 768px) {
+  .about-grid { grid-template-columns: 1fr; }
+  .about-vis { order: -1; }
+  .port-grid { grid-template-columns: 1fr; }
+  .hero-stats { gap: var(--s6); }
+  .social-hub { grid-template-columns: 1fr; }
+}
+</style>
+
+<script define:vars={{ typewriterTexts }}>
+  // Typewriter
+  const el = document.getElementById('tw');
+  let ti = 0, ci = 0, del = false;
+  function type() {
+    if (!el) return;
+    const t = typewriterTexts[ti];
+    del ? ci-- : ci++;
+    el.textContent = t.slice(0, ci);
+    if (!del && ci === t.length) { del = true; setTimeout(type, 2200); return; }
+    if (del && ci === 0)         { del = false; ti = (ti+1) % typewriterTexts.length; setTimeout(type, 400); return; }
+    setTimeout(type, del ? 45 : 95);
+  }
+  setTimeout(type, 1000);
+
+  // Scroll reveal
+  const obs = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: .1, rootMargin: '0px 0px -40px 0px' }
+  );
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
