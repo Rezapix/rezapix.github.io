@@ -1,0 +1,89 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import MediaPlaceholder from '@/components/ui/MediaPlaceholder.astro';
+import { PROJECTS, getProjectBySlug } from '@/data/content';
+
+export function getStaticPaths() {
+  return PROJECTS.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const project = getProjectBySlug(slug!);
+if (!project) return Astro.redirect('/projects');
+---
+
+<BaseLayout title={project.title} description={project.excerpt} ogType="article">
+  <article class="pt-36 pb-24">
+    <div class="container-rpix">
+      <header class="max-w-3xl mb-14" data-reveal>
+        <p class="text-label text-[var(--rpix-gold)] mb-4">
+          {project.client} · {project.year}
+        </p>
+        <h1 class="text-display mb-6">{project.title}</h1>
+        <p class="text-body-lg text-[var(--rpix-muted-fg)]">{project.excerpt}</p>
+      </header>
+
+      <div class="rounded-xl overflow-hidden mb-20" data-reveal>
+        <MediaPlaceholder label={project.title} aspect="cinema" gold />
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-16 mb-20">
+        <div class="lg:col-span-2 space-y-12" data-reveal>
+          <section>
+            <h2 class="text-h2 mb-4">Challenge</h2>
+            <p class="text-[var(--rpix-secondary-fg)] text-lg leading-relaxed">{project.challenge}</p>
+          </section>
+          <section>
+            <h2 class="text-h2 mb-4">Solution</h2>
+            <p class="text-[var(--rpix-secondary-fg)] text-lg leading-relaxed">{project.solution}</p>
+          </section>
+          <section>
+            <h2 class="text-h2 mb-4">Results</h2>
+            <ul class="space-y-3">
+              {
+                project.results.map((r) => (
+                  <li class="flex items-start gap-3 text-[var(--rpix-secondary-fg)]">
+                    <span class="text-[var(--rpix-gold)] mt-1">▸</span>
+                    {r}
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+        </div>
+
+        <aside class="space-y-8" data-reveal data-reveal-delay="100">
+          <div class="surface-card p-6">
+            <p class="text-label text-[var(--rpix-muted-fg)] mb-3">Services</p>
+            <ul class="space-y-2">
+              {project.services.map((s) => <li class="text-sm">{s}</li>)}
+            </ul>
+          </div>
+          {
+            project.testimonial && (
+              <blockquote class="surface-card p-6">
+                <p class="text-[var(--rpix-muted-fg)] italic mb-4">“{project.testimonial.quote}”</p>
+                <footer class="text-sm">
+                  <strong>{project.testimonial.author}</strong>
+                  <span class="text-[var(--rpix-muted-fg)] block">{project.testimonial.role}</span>
+                </footer>
+              </blockquote>
+            )
+          }
+        </aside>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-4 mb-16" data-reveal-stagger>
+        {
+          project.gallery.map((g) => (
+            <div data-reveal-child>
+              <MediaPlaceholder label={g.alt} aspect="photo" class="rounded-lg" />
+            </div>
+          ))
+        }
+      </div>
+
+      <a href="/projects" class="btn btn-secondary" data-magnetic>← All Projects</a>
+    </div>
+  </article>
+</BaseLayout>

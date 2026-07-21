@@ -1,0 +1,27 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PortfolioCard from '@/components/ui/PortfolioCard.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { PORTFOLIO } from '@/data/content';
+
+const items = PORTFOLIO.filter((p) => p.type === 'videography');
+---
+
+<BaseLayout
+  title="Videography"
+  description="Brand films, automotive cinema, and music visuals directed by RPIX."
+>
+  <section class="pt-36 pb-24">
+    <div class="container-rpix">
+      <SectionHeading
+        eyebrow="Discipline 02"
+        title="Videography"
+        description="Moving image with editorial restraint — directed, photographed, and finished in-house."
+        class="mb-16"
+      />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+        {items.map((item, i) => <PortfolioCard item={item} index={i} large />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,99 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+---
+
+<BaseLayout
+  title="Members"
+  description="RPIX members area — courses, bookmarks, and exclusive resources."
+>
+  <section class="pt-36 pb-24">
+    <div class="container-rpix max-w-5xl">
+      <SectionHeading
+        eyebrow="Members"
+        title="Your studio access."
+        description="Courses, bookmarks, downloads, and member-only notes."
+        class="mb-14"
+      />
+
+      <div class="grid lg:grid-cols-2 gap-8">
+        <!-- Login -->
+        <div class="surface-card p-8 md:p-10" data-reveal>
+          <h2 class="text-h2 mb-2">Sign in</h2>
+          <p class="text-sm text-[var(--rpix-muted-fg)] mb-8">
+            Access your courses and saved work.
+          </p>
+          <form class="space-y-5" data-login-form onsubmit="return false;">
+            <div>
+              <label for="login-email" class="text-label text-[var(--rpix-muted-fg)] block mb-2">Email</label>
+              <input id="login-email" type="email" required class="input-rpix" placeholder="you@email.com" />
+            </div>
+            <div>
+              <label for="login-pass" class="text-label text-[var(--rpix-muted-fg)] block mb-2">Password</label>
+              <input id="login-pass" type="password" required class="input-rpix" placeholder="••••••••" />
+            </div>
+            <button type="submit" class="btn btn-primary w-full">Sign In</button>
+            <p class="text-xs text-center text-[var(--rpix-muted-fg)]" data-login-status></p>
+          </form>
+        </div>
+
+        <!-- Dashboard preview (demo) -->
+        <div class="surface-card p-8 md:p-10" data-reveal data-reveal-delay="100">
+          <h2 class="text-h2 mb-2">Member dashboard</h2>
+          <p class="text-sm text-[var(--rpix-muted-fg)] mb-8">
+            Demo preview — sign in to activate.
+          </p>
+          <div class="space-y-4" data-member-dash>
+            {
+              [
+                { t: 'Cinematic Color Masterclass', s: '42% complete', h: '/courses/cinematic-color-masterclass' },
+                { t: 'Bookmarks', s: '0 saved', h: '/blog' },
+                { t: 'Downloads', s: 'Free resources', h: '/downloads' },
+                { t: 'Preferences', s: 'Theme · Motion · Language', h: '#' },
+              ].map((item) => (
+                <a
+                  href={item.h}
+                  class="flex items-center justify-between p-4 rounded-lg border border-[var(--rpix-border)] hover:border-[rgba(201,168,76,0.3)] transition-colors"
+                >
+                  <span>{item.t}</span>
+                  <span class="text-xs text-[var(--rpix-muted-fg)]">{item.s}</span>
+                </a>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-16 grid sm:grid-cols-3 gap-4" data-reveal>
+        {
+          [
+            { t: 'Lifetime course access', d: 'Progress saved across devices.' },
+            { t: 'Early product drops', d: 'LUT and print releases first.' },
+            { t: 'Member notes', d: 'Occasional craft dispatches.' },
+          ].map((b) => (
+            <div class="surface-card p-6">
+              <h3 class="text-h3 mb-2">{b.t}</h3>
+              <p class="text-sm text-[var(--rpix-muted-fg)]">{b.d}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const form = document.querySelector('[data-login-form]');
+  const status = document.querySelector('[data-login-status]');
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = (document.getElementById('login-email') as HTMLInputElement)?.value;
+    if (status) {
+      status.textContent = `Demo mode: signed in as ${email}. Connect auth provider (Cloudflare Access / Clerk / Auth.js) for production.`;
+      status.classList.add('text-[var(--rpix-gold)]');
+    }
+    try {
+      localStorage.setItem('rpix-member', JSON.stringify({ email, at: Date.now() }));
+    } catch { /* */ }
+  });
+</script>

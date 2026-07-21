@@ -1,0 +1,56 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { FAQ_ITEMS } from '@/data/content';
+
+const categories = [...new Set(FAQ_ITEMS.map((f) => f.category))];
+---
+
+<BaseLayout
+  title="FAQ"
+  description="Frequently asked questions about RPIX services, store, courses, and licensing."
+>
+  <section class="pt-36 pb-24">
+    <div class="container-rpix max-w-3xl">
+      <SectionHeading
+        eyebrow="Support"
+        title="FAQ"
+        description="Straight answers about working with the studio."
+        class="mb-14"
+      />
+
+      <div class="space-y-3" data-faq>
+        {
+          FAQ_ITEMS.map((item, i) => (
+            <details
+              class="surface-card group"
+              data-reveal
+              data-reveal-delay={i * 40}
+            >
+              <summary class="flex items-center justify-between gap-4 p-6 cursor-pointer list-none">
+                <span class="font-medium pr-4">{item.question}</span>
+                <span class="text-[var(--rpix-gold)] text-xl shrink-0 transition-transform duration-300 group-open:rotate-45">
+                  +
+                </span>
+              </summary>
+              <div class="px-6 pb-6 text-[var(--rpix-muted-fg)] leading-relaxed">
+                {item.answer}
+              </div>
+            </details>
+          ))
+        }
+      </div>
+
+      <div class="mt-16 text-center" data-reveal>
+        <p class="text-[var(--rpix-muted-fg)] mb-6">Still have a question?</p>
+        <a href="/contact" class="btn btn-primary" data-magnetic>Contact the Studio</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

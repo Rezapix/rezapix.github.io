@@ -1,0 +1,43 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  align?: 'left' | 'center';
+  class?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  description,
+  align = 'left',
+  class: className = '',
+} = Astro.props;
+---
+
+<div
+  class:list={[
+    'max-w-3xl',
+    align === 'center' && 'mx-auto text-center',
+    className,
+  ]}
+  data-reveal
+>
+  {
+    eyebrow && (
+      <div class:list={['flex items-center gap-3 mb-5', align === 'center' && 'justify-center']}>
+        <span class="gold-line" />
+        <p class="text-label text-[var(--rpix-gold)]">{eyebrow}</p>
+      </div>
+    )
+  }
+  <h2 class="text-h1 mb-5" set:html={title} />
+  {
+    description && (
+      <p class:list={['text-body-lg text-[var(--rpix-muted-fg)] max-w-xl', align === 'center' && 'mx-auto']}>
+        {description}
+      </p>
+    )
+  }
+</div>

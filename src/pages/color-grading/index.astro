@@ -1,0 +1,86 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PortfolioCard from '@/components/ui/PortfolioCard.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import MediaPlaceholder from '@/components/ui/MediaPlaceholder.astro';
+import { PORTFOLIO } from '@/data/content';
+
+const items = PORTFOLIO.filter((p) => p.type === 'color-grading');
+---
+
+<BaseLayout
+  title="Color Grading"
+  description="Look development and final color grade for commercial and feature delivery — SDR and HDR."
+>
+  <section class="pt-36 pb-12">
+    <div class="container-rpix">
+      <SectionHeading
+        eyebrow="Discipline 03"
+        title="Color Grading"
+        description="From log to delivery — look development, show LUTs, and final grade with a cinematic, print-aware aesthetic."
+        class="mb-16"
+      />
+
+      <!-- Process -->
+      <div class="grid md:grid-cols-4 gap-4 mb-20" data-reveal-stagger>
+        {
+          [
+            { n: '01', t: 'Ingest', d: 'Timeline conform, color management, HDR setup.' },
+            { n: '02', t: 'Balance', d: 'Primary correction, exposure, shot matching.' },
+            { n: '03', t: 'Look', d: 'Creative grade, references, director sessions.' },
+            { n: '04', t: 'Deliver', d: 'SDR + HDR trims, QC, versioning.' },
+          ].map((s) => (
+            <div class="surface-card p-6" data-reveal-child>
+              <p class="text-label text-[var(--rpix-gold)] mb-4">{s.n}</p>
+              <h3 class="text-h3 mb-2">{s.t}</h3>
+              <p class="text-sm text-[var(--rpix-muted-fg)]">{s.d}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Before/After demo -->
+      <div class="mb-20 max-w-5xl" data-reveal>
+        <h2 class="text-h2 mb-6">Grade comparison</h2>
+        <div class="before-after aspect-wide rounded-xl" data-before-after>
+          <MediaPlaceholder label="Log / Before" aspect="wide" class="w-full h-full" />
+          <div class="before-after-after">
+            <MediaPlaceholder label="Final Grade" aspect="wide" class="w-full h-full" gold />
+          </div>
+          <div class="before-after-handle" role="slider" aria-label="Compare" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" tabindex="0" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        {items.map((item, i) => <PortfolioCard item={item} index={i} large />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  document.querySelectorAll('[data-before-after]').forEach((root) => {
+    const el = root as HTMLElement;
+    const after = el.querySelector('.before-after-after') as HTMLElement;
+    const handle = el.querySelector('.before-after-handle') as HTMLElement;
+    if (!after || !handle) return;
+    let dragging = false;
+    const setPos = (clientX: number) => {
+      const rect = el.getBoundingClientRect();
+      let p = ((clientX - rect.left) / rect.width) * 100;
+      p = Math.max(2, Math.min(98, p));
+      after.style.clipPath = `inset(0 0 0 ${p}%)`;
+      handle.style.left = `${p}%`;
+      handle.setAttribute('aria-valuenow', String(Math.round(p)));
+    };
+    handle.addEventListener('pointerdown', (e) => {
+      dragging = true;
+      handle.setPointerCapture((e as PointerEvent).pointerId);
+    });
+    handle.addEventListener('pointerup', () => { dragging = false; });
+    handle.addEventListener('pointermove', (e) => {
+      if (dragging) setPos((e as PointerEvent).clientX);
+    });
+    el.addEventListener('click', (e) => setPos((e as MouseEvent).clientX));
+  });
+</script>

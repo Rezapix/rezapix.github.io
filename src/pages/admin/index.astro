@@ -1,0 +1,14 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import AdminApp from '@/components/admin/AdminApp';
+---
+
+<BaseLayout
+  title="Admin OS"
+  description="RPIX visual editing environment"
+  bare
+  noindex
+  bodyClass="!min-h-dvh overflow-hidden"
+>
+  <AdminApp client:only="react" />
+</BaseLayout>

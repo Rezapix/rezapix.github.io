@@ -1,0 +1,118 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import MediaPlaceholder from '@/components/ui/MediaPlaceholder.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { SITE } from '@/data/site';
+---
+
+<BaseLayout
+  title="About"
+  description="RPIX is a premium creative studio specializing in photography, videography, and color grading."
+>
+  <section class="pt-36 pb-12">
+    <div class="container-rpix">
+      <div class="max-w-4xl mb-20" data-reveal>
+        <div class="flex items-center gap-3 mb-6">
+          <span class="gold-line" />
+          <p class="text-label text-[var(--rpix-gold)]">The Studio</p>
+        </div>
+        <h1 class="text-display mb-8">
+          An operating system<br />for visual craft.
+        </h1>
+        <p class="text-body-lg text-[var(--rpix-muted-fg)] max-w-2xl">
+          RPIX is not a volume studio. We are a selective practice dedicated to photography,
+          cinematography, and color — built as a living digital ecosystem for clients, students,
+          and collectors.
+        </p>
+      </div>
+
+      <div class="rounded-2xl overflow-hidden mb-24" data-reveal>
+        <MediaPlaceholder label="RPIX Studio" aspect="cinema" gold />
+      </div>
+    </div>
+  </section>
+
+  <section class="pb-24">
+    <div class="container-rpix">
+      <div class="grid lg:grid-cols-2 gap-16 lg:gap-24">
+        <div data-reveal>
+          <h2 class="text-h1 mb-6">Why we exist</h2>
+          <div class="space-y-5 text-[var(--rpix-secondary-fg)] leading-relaxed">
+            <p>
+              The industry optimizes for speed and sameness. We optimize for images that still
+              feel considered a decade later — work with weight, silence, and intention.
+            </p>
+            <p>
+              Every engagement is limited so attention stays undivided. We bring the same standard
+              to a single still as to a feature grade.
+            </p>
+            <p>
+              Based in {SITE.contact.location}, working with clients worldwide.
+            </p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4" data-reveal data-reveal-delay="100">
+          {
+            [
+              { n: '12+', l: 'Years' },
+              { n: '180', l: 'Projects' },
+              { n: '3', l: 'Disciplines' },
+              { n: 'HDR', l: 'Native' },
+            ].map((s) => (
+              <div class="surface-card p-8 flex flex-col justify-end min-h-[160px]">
+                <p class="text-display text-gradient-gold mb-2">{s.n}</p>
+                <p class="text-label text-[var(--rpix-muted-fg)]">{s.l}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-rpix !pt-0">
+    <div class="container-rpix">
+      <SectionHeading
+        eyebrow="Approach"
+        title="How we work"
+        class="mb-14"
+      />
+      <div class="grid md:grid-cols-3 gap-6" data-reveal-stagger>
+        {
+          [
+            {
+              t: 'Listen first',
+              d: 'We begin with context, constraints, and the feeling the work must leave behind — not with a moodboard dump.',
+            },
+            {
+              t: 'Reduce ruthlessly',
+              d: 'Ideas are refined until only the necessary remains. Luxury is the absence of the unnecessary.',
+            },
+            {
+              t: 'Deliver forever',
+              d: 'Files, grades, and systems are built for longevity — archives you can reopen in ten years.',
+            },
+          ].map((a) => (
+            <div class="surface-card p-8" data-reveal-child>
+              <h3 class="text-h3 mb-4">{a.t}</h3>
+              <p class="text-sm text-[var(--rpix-muted-fg)] leading-relaxed">{a.d}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section-rpix">
+    <div class="container-rpix text-center max-w-2xl mx-auto" data-reveal>
+      <h2 class="text-h1 mb-6">Work with us</h2>
+      <p class="text-[var(--rpix-muted-fg)] mb-10">
+        For commissions, grading, licensing, and teaching inquiries.
+      </p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="/contact" class="btn btn-primary btn-lg" data-magnetic>Start a Project</a>
+        <a href={`mailto:${SITE.contact.email}`} class="btn btn-secondary btn-lg">{SITE.contact.email}</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

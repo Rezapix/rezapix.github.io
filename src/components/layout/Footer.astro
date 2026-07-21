@@ -1,168 +1,133 @@
 ---
+import { SITE, FOOTER_COLUMNS } from '@/data/site';
+
 const year = new Date().getFullYear();
-
-const socials = [
-  { name:'Instagram', href:'https://instagram.com/rezapix1', icon:'instagram' },
-  { name:'Telegram',  href:'#',                              icon:'telegram'  },
-  { name:'YouTube',   href:'#',                              icon:'youtube'   },
-  { name:'X / Twitter',href:'#',                             icon:'x'         },
-  { name:'Behance',   href:'#',                              icon:'behance'   },
-  { name:'Vimeo',     href:'#',                              icon:'vimeo'     },
-  { name:'Pinterest', href:'#',                              icon:'pinterest' },
-  { name:'TikTok',    href:'#',                              icon:'tiktok'    },
-];
-
-const icons: Record<string,string> = {
-  instagram:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>`,
-  telegram:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>`,
-  youtube:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`,
-  x:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`,
-  behance:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 3.211 3.483 3.312 4.588 2.029H23.73zm-7.735-4h4.808c-.309-1.671-1.3-2.289-2.29-2.289-1.143 0-2.232.51-2.518 2.289zm-4.239 2.957c-1.152 1.045-2.633.94-4.105.94H2.04V4h5.314c1.29 0 2.54.087 3.525.803.955.71 1.477 1.918 1.477 3.127 0 1.227-.503 2.42-1.432 3.108-.139.103-.285.185-.432.268.262.097.516.226.751.39 1.11.768 1.724 2.039 1.724 3.315 0 1.315-.633 2.527-1.219 3zm-5.803-9.7H7.83c1.063 0 2.15.187 2.15 1.386 0 1.146-1.038 1.35-2.01 1.35H5.949V6.257zm.001 5.236h2.344c1.158 0 2.344.263 2.344 1.648 0 1.337-1.213 1.587-2.3 1.587H5.95v-3.235z"/></svg>`,
-  vimeo:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609-3.268 4.247-6.026 6.37-8.29 6.37-1.409 0-2.578-1.294-3.553-3.881L5.322 11.4C4.603 8.816 3.834 7.522 3.01 7.522c-.179 0-.806.378-1.881 1.132L0 7.197a315.065 315.065 0 0 0 3.501-3.128C5.08 2.701 6.266 1.984 7.055 1.91c1.867-.18 3.016 1.1 3.447 3.838.465 2.953.789 4.789.971 5.507.539 2.45 1.131 3.674 1.776 3.674.502 0 1.256-.796 2.265-2.385 1.004-1.589 1.54-2.797 1.612-3.628.144-1.371-.395-2.061-1.612-2.061-.574 0-1.167.121-1.777.391 1.186-3.868 3.434-5.757 6.762-5.637 2.473.06 3.628 1.664 3.478 4.807z"/></svg>`,
-  pinterest:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0a12 12 0 0 0-4.373 23.178c-.01-.957-.001-2.113.237-3.158l1.72-7.284s-.44-.88-.44-2.18c0-2.043 1.185-3.569 2.658-3.569 1.254 0 1.86.941 1.86 2.07 0 1.261-.804 3.148-1.22 4.894-.347 1.462.734 2.653 2.175 2.653 2.61 0 4.374-3.348 4.374-7.31 0-3.011-2.023-5.262-5.669-5.262-4.125 0-6.697 3.082-6.697 6.506 0 1.18.347 2.012.892 2.664a.375.375 0 0 1 .086.352c-.091.374-.293 1.19-.333 1.356-.054.217-.178.263-.41.16-1.524-.624-2.235-2.302-2.235-4.195 0-3.122 2.638-6.889 7.847-6.889 4.185 0 6.918 3.023 6.918 6.267 0 4.28-2.373 7.458-5.86 7.458-1.172 0-2.277-.633-2.655-1.352l-.743 2.794c-.27 1.005-.795 2.012-1.215 2.787A11.975 11.975 0 0 0 12 24 12 12 0 0 0 12 0z"/></svg>`,
-  tiktok:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>`,
-};
 ---
 
-<footer class="footer">
-  <div class="container">
-    <div class="footer-grid">
+<footer class="relative border-t border-[var(--rpix-border)] mt-auto overflow-hidden">
+  <!-- Ambient gold glow -->
+  <div
+    class="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 w-[600px] h-[300px] rounded-full opacity-20"
+    style="background: radial-gradient(ellipse, rgba(201,168,76,0.25), transparent 70%);"
+    aria-hidden="true"
+  ></div>
 
-      <!-- Brand Column -->
-      <div class="col-brand">
-        <a href="/" class="brand-logo" dir="ltr">
-          <img src="/logo.png" alt="RPIX" width="52" height="52" />
-          <div>
-            <span class="brand-name font-display">RPIX</span>
-            <span class="brand-sub">Rezapix</span>
-          </div>
-        </a>
-        <p class="brand-bio">
-          عکاسی هنری، ویدیوگرافی و خلق تصویر بصری — از ایران برای جهان.
+  <div class="container-rpix section-rpix !pb-12 relative">
+    <!-- Top CTA -->
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-10 mb-20" data-reveal>
+      <div class="max-w-xl">
+        <p class="text-label text-[var(--rpix-gold)] mb-4">Begin</p>
+        <h2 class="text-display mb-6">
+          Let's make<br />something lasting.
+        </h2>
+        <p class="text-[var(--rpix-muted-fg)] text-body-lg max-w-md">
+          Selective collaborations in photography, film, and color. Tell us about your next image.
         </p>
-        <a href="mailto:RpiX1@proton.me" class="brand-email text-red" dir="ltr">
-          RpiX1@proton.me
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href="/contact" class="btn btn-primary btn-lg" data-magnetic data-cursor="Contact">
+          Start a Project
+        </a>
+        <a href="/portfolio" class="btn btn-secondary btn-lg" data-magnetic>
+          View Work
         </a>
       </div>
-
-      <!-- Navigation Column -->
-      <div class="col">
-        <h4 class="col-title">ناوبری</h4>
-        <ul class="col-links">
-          <li><a href="/">خانه</a></li>
-          <li><a href="/portfolio">پورتفولیو</a></li>
-          <li><a href="/blog">بلاگ</a></li>
-          <li><a href="/about">درباره من</a></li>
-          <li><a href="/contact">تماس</a></li>
-        </ul>
-      </div>
-
-      <!-- Categories Column -->
-      <div class="col">
-        <h4 class="col-title">دسته‌بندی</h4>
-        <ul class="col-links">
-          <li><a href="/portfolio/portrait">پرتره</a></li>
-          <li><a href="/portfolio/landscape">منظره</a></li>
-          <li><a href="/portfolio/bw">سیاه و سفید</a></li>
-          <li><a href="/portfolio/video">ویدیو</a></li>
-        </ul>
-      </div>
-
-      <!-- Social Column -->
-      <div class="col">
-        <h4 class="col-title">شبکه‌های اجتماعی</h4>
-        <div class="social-grid">
-          {socials.map(s => (
-            <a href={s.href}
-               class="social-btn glass"
-               target={s.href !== '#' ? '_blank' : undefined}
-               rel="noopener noreferrer"
-               aria-label={s.name}
-               title={s.name}>
-              <Fragment set:html={icons[s.icon]} />
-            </a>
-          ))}
-        </div>
-      </div>
-
     </div>
 
-    <div class="footer-bottom">
-      <p class="copy">© {year} RPIX — Rezapix. تمام حقوق محفوظ است.</p>
-      <p class="made">ساخته شده با ❤ در ایران</p>
+    <hr class="divider mb-16" />
+
+    <!-- Columns -->
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 mb-20">
+      <div class="col-span-2 md:col-span-4 lg:col-span-1 mb-4 lg:mb-0">
+        <a href="/" class="font-[family-name:var(--font-display)] text-lg tracking-[0.35em]">
+          RPIX
+        </a>
+        <p class="mt-4 text-sm text-[var(--rpix-muted-fg)] max-w-[220px]">
+          {SITE.tagline}
+        </p>
+        <p class="mt-6 text-sm text-[var(--rpix-muted-fg)]">
+          {SITE.contact.location}
+        </p>
+        <a
+          href={`mailto:${SITE.contact.email}`}
+          class="mt-1 block text-sm text-[var(--rpix-fg)] hover:text-[var(--rpix-gold)] transition-colors"
+        >
+          {SITE.contact.email}
+        </a>
+      </div>
+
+      {
+        FOOTER_COLUMNS.map((col) => (
+          <div>
+            <p class="text-label text-[var(--rpix-muted-fg)] mb-5">{col.title}</p>
+            <ul class="flex flex-col gap-3">
+              {col.items.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    class="text-sm text-[var(--rpix-secondary-fg)] hover:text-[var(--rpix-gold)] transition-colors"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+
+      <!-- Newsletter -->
+      <div class="col-span-2 md:col-span-1">
+        <p class="text-label text-[var(--rpix-muted-fg)] mb-5">Newsletter</p>
+        <p class="text-sm text-[var(--rpix-muted-fg)] mb-4">
+          Occasional notes on craft. No noise.
+        </p>
+        <form class="flex flex-col gap-2" data-newsletter onsubmit="return false;">
+          <input
+            type="email"
+            required
+            placeholder="Email address"
+            class="input-rpix !py-2.5 !text-sm"
+            aria-label="Email for newsletter"
+          />
+          <button type="submit" class="btn btn-secondary btn-sm w-full">
+            Subscribe
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pt-8 border-t border-[var(--rpix-border)]">
+      <p class="text-xs text-[var(--rpix-muted-fg)]">
+        © {year} RPIX Studio. All rights reserved.
+      </p>
+
+      <div class="flex items-center gap-5">
+        {
+          Object.entries(SITE.social).map(([name, url]) =>
+            url ? (
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-xs uppercase tracking-widest text-[var(--rpix-muted-fg)] hover:text-[var(--rpix-gold)] transition-colors"
+                data-cursor={name}
+              >
+                {name}
+              </a>
+            ) : null,
+          )
+        }
+      </div>
+
+      <div class="flex items-center gap-4 text-xs text-[var(--rpix-muted-fg)]">
+        <a href="/faq" class="hover:text-[var(--rpix-fg)] transition-colors">FAQ</a>
+        <a href="/members" class="hover:text-[var(--rpix-fg)] transition-colors">Members</a>
+        <a href="/admin" class="hover:text-[var(--rpix-gold)] transition-colors" data-no-transition>
+          Admin
+        </a>
+      </div>
     </div>
   </div>
 </footer>
-
-<style>
-.footer {
-  border-top: 1px solid var(--glass-border);
-  background: linear-gradient(0deg, var(--bg-void) 0%, transparent 100%);
-  padding-top: var(--s16);
-  padding-bottom: var(--s8);
-}
-.footer-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: var(--s12);
-  margin-bottom: var(--s12);
-}
-.brand-logo {
-  display: flex; align-items: center; gap: var(--s3);
-  margin-bottom: var(--s5);
-}
-.brand-logo img {
-  object-fit: contain;
-  filter: drop-shadow(0 0 8px rgba(204,0,0,0.3));
-}
-.brand-name {
-  display:block; font-size:var(--2xl);
-  font-weight:800; font-style:italic; color:var(--text-1);
-}
-.brand-sub {
-  display:block; font-size:var(--xs); color:var(--text-3); letter-spacing:.1em;
-}
-.brand-bio {
-  font-size:var(--sm); color:var(--text-2); line-height:1.8; margin-bottom:var(--s4);
-}
-.brand-email {
-  font-size:var(--sm); font-family:var(--font-en); transition:opacity var(--t-fast);
-}
-.brand-email:hover { opacity:.7; }
-
-.col-title {
-  font-size:var(--sm); font-weight:600; color:var(--text-1);
-  letter-spacing:.05em; margin-bottom:var(--s4);
-}
-.col-links { display:flex; flex-direction:column; gap:var(--s3); }
-.col-links a { font-size:var(--sm); color:var(--text-2); transition:color var(--t-fast); }
-.col-links a:hover { color:var(--red); }
-
-.social-grid { display:flex; flex-wrap:wrap; gap:var(--s2); }
-.social-btn {
-  width:38px; height:38px;
-  display:flex; align-items:center; justify-content:center;
-  border-radius:var(--r-md); color:var(--text-2);
-  transition:all var(--t-fast); flex-shrink:0;
-}
-.social-btn svg { width:17px; height:17px; }
-.social-btn:hover { color:var(--red); border-color:var(--glass-red-b); background:var(--glass-red); }
-
-.footer-bottom {
-  padding-top:var(--s6);
-  border-top:1px solid var(--glass-border);
-  display:flex; justify-content:space-between; align-items:center;
-  flex-wrap:wrap; gap:var(--s4);
-}
-.copy,.made { font-size:var(--xs); color:var(--text-3); }
-
-@media(max-width:1024px){
-  .footer-grid { grid-template-columns:1fr 1fr; gap:var(--s8); }
-  .col-brand { grid-column:1/-1; }
-}
-@media(max-width:640px){
-  .footer-grid { grid-template-columns:1fr; }
-  .col-brand { grid-column:auto; }
-  .footer-bottom { flex-direction:column; text-align:center; }
-}
-</style>

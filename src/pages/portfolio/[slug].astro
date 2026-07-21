@@ -1,0 +1,159 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import MediaPlaceholder from '@/components/ui/MediaPlaceholder.astro';
+import { PORTFOLIO, getPortfolioBySlug } from '@/data/content';
+
+export function getStaticPaths() {
+  return PORTFOLIO.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const item = getPortfolioBySlug(slug!);
+if (!item) return Astro.redirect('/portfolio');
+
+const related = PORTFOLIO.filter((p) => p.id !== item.id && p.type === item.type).slice(0, 3);
+---
+
+<BaseLayout
+  title={item.title}
+  description={item.excerpt ?? item.seo.description}
+  ogType="article"
+>
+  <!-- Hero -->
+  <section class="pt-28">
+    <div class="container-rpix">
+      <div class="max-w-4xl mb-10" data-reveal>
+        <div class="flex items-center gap-3 mb-6">
+          <span class="gold-line" />
+          <p class="text-label text-[var(--rpix-gold)]">{item.type.replace('-', ' ')} · {item.year}</p>
+        </div>
+        <h1 class="text-display mb-6">{item.title}</h1>
+        <p class="text-body-lg text-[var(--rpix-muted-fg)] max-w-2xl">{item.excerpt}</p>
+      </div>
+
+      <div class="rounded-xl overflow-hidden mb-16" data-reveal>
+        <MediaPlaceholder label={item.title} aspect="cinema" gold class="w-full" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Meta -->
+  <section class="pb-16">
+    <div class="container-rpix">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl" data-reveal>
+        {
+          [
+            { label: 'Client', value: item.client ?? '—' },
+            { label: 'Year', value: String(item.year) },
+            { label: 'Role', value: item.role.join(', ') },
+            { label: 'Tools', value: item.tools.join(' · ') },
+          ].map((m) => (
+            <div>
+              <p class="text-label text-[var(--rpix-muted-fg)] mb-2">{m.label}</p>
+              <p class="text-sm">{m.value}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="pb-24">
+    <div class="container-rpix">
+      <div class="grid md:grid-cols-2 gap-4 md:gap-5" data-reveal-stagger>
+        {
+          item.gallery.map((g, i) => (
+            <div
+              class:list={[i % 3 === 0 ? 'md:col-span-2' : '']}
+              data-reveal-child
+            >
+              <MediaPlaceholder
+                label={g.alt}
+                aspect={i % 3 === 0 ? 'wide' : i % 2 === 0 ? 'photo' : 'portrait'}
+                class="rounded-lg"
+              />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Before / After -->
+  {
+    item.beforeAfter && item.beforeAfter.length > 0 && (
+      <section class="pb-24">
+        <div class="container-rpix max-w-5xl">
+          <h2 class="text-h2 mb-8" data-reveal>Before / After</h2>
+          <div class="before-after aspect-wide rounded-xl" data-before-after data-reveal>
+            <MediaPlaceholder label="Before" aspect="wide" class="w-full h-full" />
+            <div class="before-after-after">
+              <MediaPlaceholder label="After" aspect="wide" class="w-full h-full" gold />
+            </div>
+            <div class="before-after-handle" role="slider" aria-label="Compare before and after" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" tabindex="0" />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Related -->
+  {
+    related.length > 0 && (
+      <section class="section-rpix !pt-0">
+        <div class="container-rpix">
+          <h2 class="text-h2 mb-10" data-reveal>Related Work</h2>
+          <div class="grid sm:grid-cols-3 gap-5">
+            {related.map((r) => (
+              <a href={`/portfolio/${r.slug}`} class="group" data-reveal data-cursor="View">
+                <MediaPlaceholder label={r.title} aspect="portrait" class="rounded-lg mb-4" />
+                <h3 class="text-h3 group-hover:text-[var(--rpix-gold)] transition-colors">{r.title}</h3>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <div class="container-rpix pb-24">
+    <a href="/portfolio" class="btn btn-secondary" data-magnetic>← All Work</a>
+  </div>
+</BaseLayout>
+
+<script>
+  document.querySelectorAll('[data-before-after]').forEach((root) => {
+    const el = root as HTMLElement;
+    const after = el.querySelector('.before-after-after') as HTMLElement;
+    const handle = el.querySelector('.before-after-handle') as HTMLElement;
+    if (!after || !handle) return;
+
+    let dragging = false;
+
+    const setPos = (clientX: number) => {
+      const rect = el.getBoundingClientRect();
+      let p = ((clientX - rect.left) / rect.width) * 100;
+      p = Math.max(2, Math.min(98, p));
+      after.style.clipPath = `inset(0 0 0 ${p}%)`;
+      handle.style.left = `${p}%`;
+      handle.setAttribute('aria-valuenow', String(Math.round(p)));
+    };
+
+    handle.addEventListener('pointerdown', (e) => {
+      dragging = true;
+      handle.setPointerCapture((e as PointerEvent).pointerId);
+    });
+    handle.addEventListener('pointerup', () => { dragging = false; });
+    handle.addEventListener('pointermove', (e) => {
+      if (dragging) setPos((e as PointerEvent).clientX);
+    });
+    el.addEventListener('click', (e) => setPos((e as MouseEvent).clientX));
+    handle.addEventListener('keydown', (e) => {
+      const ke = e as KeyboardEvent;
+      const cur = Number(handle.getAttribute('aria-valuenow') || 50);
+      if (ke.key === 'ArrowLeft') setPos(el.getBoundingClientRect().left + ((cur - 5) / 100) * el.offsetWidth);
+      if (ke.key === 'ArrowRight') setPos(el.getBoundingClientRect().left + ((cur + 5) / 100) * el.offsetWidth);
+    });
+  });
+</script>

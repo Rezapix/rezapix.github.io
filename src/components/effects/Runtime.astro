@@ -1,0 +1,89 @@
+---
+/**
+ * RPIX Runtime — boots Lenis, cursor, reveals, transitions, loader
+ */
+---
+
+<script>
+  import { initLenis } from '@/lib/animation/lenis';
+  import { initCursor } from '@/lib/animation/cursor';
+  import { revealElements, revealStagger } from '@/lib/animation/reveal';
+  import { initPageTransitions } from '@/lib/animation/page-transition';
+  import { runLoader } from '@/lib/animation/loader';
+  import { getCustomizer } from '@/lib/customizer/store';
+
+  async function boot() {
+    // Apply saved theme
+    try {
+      getCustomizer().applyToDOM();
+    } catch {
+      /* ok */
+    }
+
+    // Grain + vignette defaults
+    document.documentElement.classList.add('grain', 'vignette');
+
+    // Skip heavy boot on admin
+    const isAdmin = window.location.pathname.startsWith('/admin');
+
+    if (!isAdmin) {
+      await runLoader();
+      initLenis();
+      initCursor();
+      initPageTransitions();
+
+      // Scroll progress
+      const bar = document.querySelector<HTMLElement>('.scroll-progress');
+      if (bar) {
+        const onScroll = () => {
+          const h = document.documentElement.scrollHeight - window.innerHeight;
+          const p = h > 0 ? window.scrollY / h : 0;
+          bar.style.transform = `scaleX(${p})`;
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      }
+
+      // Header scroll state
+      const header = document.querySelector<HTMLElement>('[data-header]');
+      if (header) {
+        const onScrollHeader = () => {
+          header.classList.toggle('is-scrolled', window.scrollY > 40);
+        };
+        window.addEventListener('scroll', onScrollHeader, { passive: true });
+        onScrollHeader();
+      }
+    }
+
+    // Reveals
+    requestAnimationFrame(() => {
+      revealElements('[data-reveal]');
+      document.querySelectorAll('[data-reveal-stagger]').forEach((el) => {
+        revealStagger(el);
+      });
+    });
+
+    // Mobile nav
+    const toggle = document.querySelector('[data-nav-toggle]');
+    const mobile = document.querySelector('[data-mobile-nav]');
+    toggle?.addEventListener('click', () => {
+      const open = document.body.classList.toggle('menu-open');
+      toggle.setAttribute('aria-expanded', String(open));
+      mobile?.classList.toggle('is-open', open);
+    });
+
+    mobile?.querySelectorAll('a').forEach((a) => {
+      a.addEventListener('click', () => {
+        document.body.classList.remove('menu-open');
+        mobile.classList.remove('is-open');
+        toggle?.setAttribute('aria-expanded', 'false');
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+</script>

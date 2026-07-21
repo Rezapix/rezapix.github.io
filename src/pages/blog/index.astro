@@ -1,0 +1,75 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import MediaPlaceholder from '@/components/ui/MediaPlaceholder.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { BLOG } from '@/data/content';
+import { formatDate } from '@/lib/utils/format';
+
+const posts = [...BLOG].sort(
+  (a, b) =>
+    new Date(b.publishedAt ?? b.createdAt).getTime() -
+    new Date(a.publishedAt ?? a.createdAt).getTime(),
+);
+const [featured, ...rest] = posts;
+---
+
+<BaseLayout
+  title="Journal"
+  description="Essays, field notes, and technical writing on photography, film, and color from RPIX."
+>
+  <section class="pt-36 pb-24">
+    <div class="container-rpix">
+      <SectionHeading
+        eyebrow="Journal"
+        title="Notes on craft."
+        description="Writing from the suite — philosophy, technique, and field observations."
+        class="mb-16"
+      />
+
+      {
+        featured && (
+          <a
+            href={`/blog/${featured.slug}`}
+            class="group grid lg:grid-cols-2 gap-8 lg:gap-12 items-center mb-20 surface-card p-4 md:p-6 rounded-2xl"
+            data-reveal
+            data-cursor="Read"
+          >
+            <MediaPlaceholder label={featured.title} aspect="wide" class="rounded-xl" gold />
+            <div class="p-2 md:p-4">
+              <p class="text-label text-[var(--rpix-gold)] mb-3">Featured</p>
+              <h2 class="text-h1 mb-4 group-hover:text-[var(--rpix-gold)] transition-colors">
+                {featured.title}
+              </h2>
+              <p class="text-[var(--rpix-muted-fg)] mb-6">{featured.excerpt}</p>
+              <p class="text-sm text-[var(--rpix-muted-fg)]">
+                {formatDate(featured.publishedAt ?? featured.createdAt)} · {featured.readingTime} min read
+              </p>
+            </div>
+          </a>
+        )
+      }
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-reveal-stagger>
+        {
+          rest.map((post) => (
+            <a href={`/blog/${post.slug}`} class="group flex flex-col" data-reveal-child data-cursor="Read">
+              <MediaPlaceholder label={post.title} aspect="wide" class="rounded-lg mb-5" />
+              <div class="flex flex-wrap gap-2 mb-3">
+                {post.tags.slice(0, 2).map((t) => (
+                  <span class="text-label text-[var(--rpix-muted-fg)]">#{t}</span>
+                ))}
+              </div>
+              <h3 class="text-h3 mb-2 group-hover:text-[var(--rpix-gold)] transition-colors">
+                {post.title}
+              </h3>
+              <p class="text-sm text-[var(--rpix-muted-fg)] line-clamp-2 mb-4 flex-1">{post.excerpt}</p>
+              <p class="text-xs text-[var(--rpix-muted-fg)]">
+                {formatDate(post.publishedAt ?? post.createdAt)} · {post.readingTime} min
+              </p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>

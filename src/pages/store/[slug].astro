@@ -1,0 +1,87 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import MediaPlaceholder from '@/components/ui/MediaPlaceholder.astro';
+import { PRODUCTS, getProductBySlug } from '@/data/content';
+import { formatPrice } from '@/lib/utils/format';
+
+export function getStaticPaths() {
+  return PRODUCTS.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const product = getProductBySlug(slug!);
+if (!product) return Astro.redirect('/store');
+---
+
+<BaseLayout title={product.title} description={product.excerpt}>
+  <section class="pt-36 pb-24">
+    <div class="container-rpix">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20">
+        <div data-reveal>
+          <MediaPlaceholder label={product.title} aspect="square" class="rounded-xl" gold />
+          {
+            product.gallery.length > 0 && (
+              <div class="grid grid-cols-3 gap-3 mt-3">
+                {product.gallery.map((g) => (
+                  <MediaPlaceholder label={g.alt} aspect="square" class="rounded-lg" />
+                ))}
+              </div>
+            )
+          }
+        </div>
+
+        <div data-reveal data-reveal-delay="100">
+          <p class="text-label text-[var(--rpix-gold)] mb-4">{product.type}</p>
+          <h1 class="text-display mb-4">{product.title}</h1>
+          <div class="flex items-baseline gap-3 mb-6">
+            <span class="text-h2 text-[var(--rpix-gold)]">
+              {formatPrice(product.price, product.currency)}
+            </span>
+            {
+              product.compareAtPrice && (
+                <span class="text-lg text-[var(--rpix-muted-fg)] line-through">
+                  {formatPrice(product.compareAtPrice, product.currency)}
+                </span>
+              )
+            }
+          </div>
+          <p class="text-body-lg text-[var(--rpix-muted-fg)] mb-8">{product.excerpt}</p>
+
+          <ul class="space-y-3 mb-10">
+            {
+              product.features.map((f) => (
+                <li class="flex items-start gap-3 text-sm">
+                  <span class="text-[var(--rpix-gold)] mt-0.5">✓</span>
+                  {f}
+                </li>
+              ))
+            }
+          </ul>
+
+          {
+            product.inventory !== undefined && (
+              <p class="text-sm text-[var(--rpix-muted-fg)] mb-6">
+                {product.inventory} remaining
+              </p>
+            )
+          }
+
+          <div class="flex flex-wrap gap-3">
+            <button type="button" class="btn btn-primary btn-lg" data-magnetic data-cursor="Buy">
+              {product.type === 'digital' ? 'Purchase & Download' : 'Add to Cart'}
+            </button>
+            <a href="/contact" class="btn btn-secondary btn-lg">Ask a Question</a>
+          </div>
+
+          <p class="text-xs text-[var(--rpix-muted-fg)] mt-6">
+            SKU {product.sku} · Secure checkout · Instant delivery for digital goods
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-16">
+        <a href="/store" class="btn btn-secondary" data-magnetic>← Store</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

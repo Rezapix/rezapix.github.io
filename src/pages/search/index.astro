@@ -1,0 +1,92 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { searchContent } from '@/data/content';
+
+const q = Astro.url.searchParams.get('q') ?? '';
+const results = q ? searchContent(q) : [];
+---
+
+<BaseLayout title="Search" description="Search RPIX — work, journal, store, and courses.">
+  <section class="pt-36 pb-24">
+    <div class="container-rpix max-w-3xl">
+      <h1 class="text-display mb-10" data-reveal>Search</h1>
+
+      <form action="/search" method="get" class="mb-12" data-reveal>
+        <div class="relative">
+          <input
+            type="search"
+            name="q"
+            value={q}
+            placeholder="Work, articles, products, courses…"
+            class="input-rpix !py-4 !pr-12 !text-lg"
+            autofocus
+            aria-label="Search"
+          />
+          <button
+            type="submit"
+            class="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--rpix-muted-fg)] hover:text-[var(--rpix-gold)]"
+            aria-label="Submit search"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="11" cy="11" r="7" />
+              <path d="M20 20l-3-3" stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+      </form>
+
+      {
+        q && (
+          <p class="text-sm text-[var(--rpix-muted-fg)] mb-8" data-reveal>
+            {results.length} result{results.length === 1 ? '' : 's'} for “{q}”
+          </p>
+        )
+      }
+
+      <div class="space-y-2">
+        {
+          results.map((r, i) => (
+            <a
+              href={r.href}
+              class="block surface-card p-5 hover:border-[rgba(201,168,76,0.3)] transition-colors"
+              data-reveal
+              data-reveal-delay={i * 40}
+            >
+              <div class="flex items-center gap-3 mb-1">
+                <span class="text-label text-[var(--rpix-gold)]">{r.type}</span>
+              </div>
+              <h2 class="text-h3 mb-1">{r.title}</h2>
+              <p class="text-sm text-[var(--rpix-muted-fg)] line-clamp-2">{r.excerpt}</p>
+            </a>
+          ))
+        }
+      </div>
+
+      {
+        q && results.length === 0 && (
+          <div class="text-center py-16" data-reveal>
+            <p class="text-[var(--rpix-muted-fg)] mb-6">No results. Try a broader term.</p>
+            <a href="/portfolio" class="btn btn-secondary">Browse Portfolio</a>
+          </div>
+        )
+      }
+
+      {
+        !q && (
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3" data-reveal>
+            {[
+              { l: 'Portfolio', h: '/portfolio' },
+              { l: 'Journal', h: '/blog' },
+              { l: 'Store', h: '/store' },
+              { l: 'Courses', h: '/courses' },
+            ].map((l) => (
+              <a href={l.h} class="surface-card p-5 text-center hover:border-[rgba(201,168,76,0.3)] transition-colors">
+                {l.l}
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>

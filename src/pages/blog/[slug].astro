@@ -1,0 +1,177 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import MediaPlaceholder from '@/components/ui/MediaPlaceholder.astro';
+import { BLOG, getBlogBySlug } from '@/data/content';
+import { formatDate } from '@/lib/utils/format';
+import MarkdownIt from 'markdown-it';
+
+export function getStaticPaths() {
+  return BLOG.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const post = getBlogBySlug(slug!);
+if (!post) return Astro.redirect('/blog');
+
+const md = new MarkdownIt({ html: false, linkify: true, typographer: true });
+const html = md.render(post.content);
+const related = BLOG.filter((b) => b.id !== post.id).slice(0, 2);
+---
+
+<BaseLayout title={post.title} description={post.excerpt} ogType="article">
+  <div class="reading-progress" aria-hidden="true">
+    <div class="reading-progress-bar" data-reading-progress />
+  </div>
+
+  <article class="pt-36 pb-24">
+    <header class="container-rpix max-w-3xl mb-12" data-reveal>
+      <div class="flex flex-wrap items-center gap-3 mb-6">
+        <span class="gold-line" />
+        <p class="text-label text-[var(--rpix-gold)]">Journal</p>
+        {
+          post.tags.map((t) => (
+            <span class="text-label text-[var(--rpix-muted-fg)]">#{t}</span>
+          ))
+        }
+      </div>
+      <h1 class="text-display mb-6">{post.title}</h1>
+      <p class="text-body-lg text-[var(--rpix-muted-fg)] mb-8">{post.excerpt}</p>
+      <div class="flex flex-wrap items-center gap-4 text-sm text-[var(--rpix-muted-fg)]">
+        <time datetime={post.publishedAt ?? post.createdAt}>
+          {formatDate(post.publishedAt ?? post.createdAt, 'MMMM d, yyyy')}
+        </time>
+        <span aria-hidden="true">·</span>
+        <span>{post.readingTime} min read</span>
+        <button
+          type="button"
+          class="ml-auto text-label hover:text-[var(--rpix-gold)] transition-colors"
+          data-bookmark={post.id}
+          aria-label="Bookmark article"
+        >
+          Bookmark
+        </button>
+      </div>
+    </header>
+
+    {
+      post.cover && (
+        <div class="container-rpix max-w-5xl mb-16" data-reveal>
+          <MediaPlaceholder label={post.title} aspect="wide" class="rounded-xl" gold />
+        </div>
+      )
+    }
+
+    <div class="container-rpix">
+      <div class="grid lg:grid-cols-[1fr_220px] gap-16 max-w-5xl mx-auto">
+        <div class="prose-rpix" data-reveal set:html={html} />
+
+        <aside class="hidden lg:block">
+          <div class="sticky top-28 space-y-8">
+            <div>
+              <p class="text-label text-[var(--rpix-muted-fg)] mb-3">On this page</p>
+              <nav data-toc class="text-sm space-y-2 text-[var(--rpix-muted-fg)]" />
+            </div>
+            <div>
+              <p class="text-label text-[var(--rpix-muted-fg)] mb-3">Share</p>
+              <div class="flex flex-col gap-2 text-sm">
+                <a
+                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(`https://rpix.studio/blog/${post.slug}`)}`}
+                  target="_blank"
+                  rel="noopener"
+                  class="hover:text-[var(--rpix-gold)]"
+                >
+                  Twitter
+                </a>
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`https://rpix.studio/blog/${post.slug}`)}`}
+                  target="_blank"
+                  rel="noopener"
+                  class="hover:text-[var(--rpix-gold)]"
+                >
+                  LinkedIn
+                </a>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    {
+      related.length > 0 && (
+        <div class="container-rpix max-w-5xl mt-24">
+          <h2 class="text-h2 mb-8" data-reveal>Continue reading</h2>
+          <div class="grid md:grid-cols-2 gap-8">
+            {related.map((r) => (
+              <a href={`/blog/${r.slug}`} class="group" data-reveal>
+                <MediaPlaceholder label={r.title} aspect="wide" class="rounded-lg mb-4" />
+                <h3 class="text-h3 group-hover:text-[var(--rpix-gold)] transition-colors">{r.title}</h3>
+              </a>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    <div class="container-rpix max-w-3xl mt-16">
+      <a href="/blog" class="btn btn-secondary" data-magnetic>← All Articles</a>
+    </div>
+  </article>
+</BaseLayout>
+
+<script>
+  // Reading progress
+  const bar = document.querySelector<HTMLElement>('[data-reading-progress]');
+  const article = document.querySelector('.prose-rpix');
+  if (bar && article) {
+    const onScroll = () => {
+      const rect = article.getBoundingClientRect();
+      const total = article.scrollHeight - window.innerHeight;
+      const scrolled = -rect.top;
+      const p = Math.max(0, Math.min(1, scrolled / Math.max(total, 1)));
+      bar.style.width = `${p * 100}%`;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  }
+
+  // TOC
+  const toc = document.querySelector('[data-toc]');
+  if (toc && article) {
+    const headings = article.querySelectorAll('h2, h3');
+    headings.forEach((h, i) => {
+      const id = `heading-${i}`;
+      h.id = id;
+      const a = document.createElement('a');
+      a.href = `#${id}`;
+      a.textContent = h.textContent;
+      a.className = h.tagName === 'H3' ? 'block pl-3 hover:text-[var(--rpix-fg)]' : 'block hover:text-[var(--rpix-fg)]';
+      toc.appendChild(a);
+    });
+  }
+
+  // Bookmarks
+  document.querySelectorAll('[data-bookmark]').forEach((btn) => {
+    const id = (btn as HTMLElement).dataset.bookmark!;
+    const key = 'rpix-bookmarks';
+    const get = (): string[] => {
+      try {
+        return JSON.parse(localStorage.getItem(key) || '[]');
+      } catch {
+        return [];
+      }
+    };
+    const update = () => {
+      const list = get();
+      (btn as HTMLElement).textContent = list.includes(id) ? 'Bookmarked ✓' : 'Bookmark';
+    };
+    update();
+    btn.addEventListener('click', () => {
+      let list = get();
+      if (list.includes(id)) list = list.filter((x) => x !== id);
+      else list.push(id);
+      localStorage.setItem(key, JSON.stringify(list));
+      update();
+    });
+  });
+</script>

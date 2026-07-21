@@ -1,0 +1,49 @@
+---
+import type { PortfolioItem } from '@/types';
+import MediaPlaceholder from './MediaPlaceholder.astro';
+
+interface Props {
+  item: PortfolioItem;
+  large?: boolean;
+  index?: number;
+}
+
+const { item, large = false, index = 0 } = Astro.props;
+const href = `/portfolio/${item.slug}`;
+---
+
+<a
+  href={href}
+  class:list={['portfolio-card group block', large ? 'col-span-full md:col-span-2' : '']}
+  data-reveal
+  data-reveal-delay={index * 80}
+  data-cursor="View"
+  data-magnetic
+>
+  <div class:list={[large ? 'aspect-[16/9] md:aspect-[21/9]' : 'aspect-[3/4] md:aspect-[4/5]', 'relative']}>
+    <MediaPlaceholder
+      label={item.title}
+      aspect={large ? '21/9' : '3/4'}
+      class="absolute inset-0 !rounded-none h-full w-full portfolio-card-media"
+      gold={item.featured}
+    />
+    <div class="portfolio-card-overlay">
+      <p class="text-label text-[var(--rpix-gold)] mb-2">{item.type.replace('-', ' ')}</p>
+      <h3 class="text-h3 text-[var(--rpix-fg)] mb-1">{item.title}</h3>
+      <p class="text-sm text-[var(--rpix-muted-fg)] line-clamp-2">{item.excerpt}</p>
+    </div>
+
+    <!-- Always-visible minimal caption on mobile / resting state -->
+    <div class="absolute bottom-0 inset-x-0 p-4 md:p-5 z-[1] transition-opacity duration-300 group-hover:opacity-0">
+      <div class="flex items-end justify-between gap-3">
+        <div>
+          <p class="text-label text-[var(--rpix-muted-fg)] mb-1">{item.year}</p>
+          <h3 class="text-[1rem] md:text-lg font-[family-name:var(--font-display)] tracking-tight">
+            {item.title}
+          </h3>
+        </div>
+        <span class="text-label text-[var(--rpix-gold)] hidden sm:block">{item.type.split('-')[0]}</span>
+      </div>
+    </div>
+  </div>
+</a>

@@ -1,0 +1,103 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import MediaPlaceholder from '@/components/ui/MediaPlaceholder.astro';
+import { COURSES, getCourseBySlug } from '@/data/content';
+import { formatPrice, formatDuration } from '@/lib/utils/format';
+
+export function getStaticPaths() {
+  return COURSES.map((c) => ({ params: { slug: c.slug } }));
+}
+
+const { slug } = Astro.params;
+const course = getCourseBySlug(slug!);
+if (!course) return Astro.redirect('/courses');
+---
+
+<BaseLayout title={course.title} description={course.excerpt}>
+  <section class="pt-36 pb-24">
+    <div class="container-rpix">
+      <div class="grid lg:grid-cols-[1.2fr_0.8fr] gap-12 lg:gap-16 mb-20">
+        <div data-reveal>
+          <p class="text-label text-[var(--rpix-gold)] mb-4">Course · {course.level}</p>
+          <h1 class="text-display mb-6">{course.title}</h1>
+          <p class="text-body-lg text-[var(--rpix-muted-fg)] mb-8">{course.excerpt}</p>
+          <div class="flex flex-wrap gap-4 text-sm text-[var(--rpix-muted-fg)] mb-10">
+            <span>{Math.round(course.duration / 60)} hours</span>
+            <span>·</span>
+            <span>{course.lessons.length} lessons</span>
+            <span>·</span>
+            <span>Lifetime access</span>
+          </div>
+          <MediaPlaceholder label={course.title} aspect="wide" class="rounded-xl" gold />
+        </div>
+
+        <aside data-reveal data-reveal-delay="100">
+          <div class="surface-card p-8 sticky top-28">
+            <p class="text-h1 text-[var(--rpix-gold)] mb-2">
+              {formatPrice(course.price, course.currency)}
+            </p>
+            <p class="text-sm text-[var(--rpix-muted-fg)] mb-8">One-time · lifetime access</p>
+            <button type="button" class="btn btn-gold w-full btn-lg mb-3" data-magnetic>
+              Enroll Now
+            </button>
+            <a href="/members" class="btn btn-secondary w-full">Members Login</a>
+            <hr class="divider my-8" />
+            <p class="text-label text-[var(--rpix-muted-fg)] mb-3">You'll learn</p>
+            <ul class="space-y-2 mb-8">
+              {
+                course.outcomes.map((o) => (
+                  <li class="flex gap-2 text-sm">
+                    <span class="text-[var(--rpix-gold)]">✓</span>
+                    {o}
+                  </li>
+                ))
+              }
+            </ul>
+            {
+              course.prerequisites.length > 0 && (
+                <>
+                  <p class="text-label text-[var(--rpix-muted-fg)] mb-3">Prerequisites</p>
+                  <ul class="space-y-2">
+                    {course.prerequisites.map((p) => (
+                      <li class="text-sm text-[var(--rpix-muted-fg)]">{p}</li>
+                    ))}
+                  </ul>
+                </>
+              )
+            }
+          </div>
+        </aside>
+      </div>
+
+      <div data-reveal>
+        <h2 class="text-h2 mb-8">Curriculum</h2>
+        <div class="max-w-3xl divide-y divide-[var(--rpix-border)] border-y border-[var(--rpix-border)]">
+          {
+            course.lessons.map((lesson) => (
+              <div class="flex items-center justify-between gap-4 py-5">
+                <div class="flex items-center gap-4">
+                  <span class="text-label text-[var(--rpix-muted-fg)] w-8">
+                    {String(lesson.order).padStart(2, '0')}
+                  </span>
+                  <div>
+                    <p class="font-medium">{lesson.title}</p>
+                    {lesson.free && (
+                      <span class="text-label text-[var(--rpix-gold)]">Free preview</span>
+                    )}
+                  </div>
+                </div>
+                <span class="text-sm text-[var(--rpix-muted-fg)] tabular-nums">
+                  {formatDuration(lesson.duration * 60)}
+                </span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="mt-16">
+        <a href="/courses" class="btn btn-secondary" data-magnetic>← All Courses</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

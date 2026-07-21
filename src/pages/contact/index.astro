@@ -1,0 +1,131 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import { SITE } from '@/data/site';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Start a project with RPIX — photography, film, and color grading inquiries."
+>
+  <section class="pt-36 pb-24">
+    <div class="container-rpix">
+      <div class="grid lg:grid-cols-2 gap-16 lg:gap-24">
+        <div>
+          <SectionHeading
+            eyebrow="Contact"
+            title="Tell us about the work."
+            description="Select projects only. We respond within two business days."
+            class="mb-12"
+          />
+
+          <div class="space-y-8" data-reveal>
+            <div>
+              <p class="text-label text-[var(--rpix-muted-fg)] mb-2">Email</p>
+              <a
+                href={`mailto:${SITE.contact.email}`}
+                class="text-h3 hover:text-[var(--rpix-gold)] transition-colors"
+              >
+                {SITE.contact.email}
+              </a>
+            </div>
+            <div>
+              <p class="text-label text-[var(--rpix-muted-fg)] mb-2">Location</p>
+              <p class="text-h3">{SITE.contact.location}</p>
+            </div>
+            <div>
+              <p class="text-label text-[var(--rpix-muted-fg)] mb-3">Social</p>
+              <div class="flex flex-wrap gap-4">
+                {
+                  Object.entries(SITE.social).map(([name, url]) =>
+                    url ? (
+                      <a
+                        href={url}
+                        target="_blank"
+                        rel="noopener"
+                        class="text-sm uppercase tracking-widest text-[var(--rpix-muted-fg)] hover:text-[var(--rpix-gold)] transition-colors"
+                      >
+                        {name}
+                      </a>
+                    ) : null,
+                  )
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div data-reveal data-reveal-delay="100">
+          <form
+            class="surface-card p-8 md:p-10 space-y-6"
+            data-contact-form
+            onsubmit="return false;"
+          >
+            <div class="grid sm:grid-cols-2 gap-5">
+              <div>
+                <label for="name" class="text-label text-[var(--rpix-muted-fg)] block mb-2">Name</label>
+                <input id="name" name="name" type="text" required class="input-rpix" placeholder="Your name" />
+              </div>
+              <div>
+                <label for="email" class="text-label text-[var(--rpix-muted-fg)] block mb-2">Email</label>
+                <input id="email" name="email" type="email" required class="input-rpix" placeholder="you@studio.com" />
+              </div>
+            </div>
+
+            <div>
+              <label for="type" class="text-label text-[var(--rpix-muted-fg)] block mb-2">Project type</label>
+              <select id="type" name="type" class="input-rpix">
+                <option value="photography">Photography</option>
+                <option value="videography">Videography</option>
+                <option value="color-grading">Color Grading</option>
+                <option value="multi">Multi-discipline</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="budget" class="text-label text-[var(--rpix-muted-fg)] block mb-2">Budget range</label>
+              <select id="budget" name="budget" class="input-rpix">
+                <option value="discuss">Prefer to discuss</option>
+                <option value="5-15">€5k – €15k</option>
+                <option value="15-40">€15k – €40k</option>
+                <option value="40-100">€40k – €100k</option>
+                <option value="100+">€100k+</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="message" class="text-label text-[var(--rpix-muted-fg)] block mb-2">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                required
+                rows="6"
+                class="input-rpix resize-y min-h-[140px]"
+                placeholder="Timeline, references, and what success looks like…"
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-full" data-magnetic>
+              Send Inquiry
+            </button>
+            <p class="text-xs text-center text-[var(--rpix-muted-fg)]" data-form-status></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  const status = document.querySelector('[data-form-status]');
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (status) {
+      status.textContent = 'Thank you. Your inquiry has been received — we will respond within two business days.';
+      status.classList.add('text-[var(--rpix-gold)]');
+    }
+    form.reset();
+  });
+</script>

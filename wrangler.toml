@@ -1,0 +1,18 @@
+# Cloudflare Pages — RPIX Creative OS
+name = "rpix"
+compatibility_date = "2026-07-01"
+pages_build_output_dir = "dist"
+
+# Future: Workers bindings for AI, D1, KV, R2
+# [[kv_namespaces]]
+# binding = "THEME"
+# id = "..."
+
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "rpix"
+# database_id = "..."
+
+# [[r2_buckets]]
+# binding = "MEDIA"
+# bucket_name = "rpix-media"

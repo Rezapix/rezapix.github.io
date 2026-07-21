@@ -1,3 +1,6 @@
 User-agent: *
 Allow: /
-Sitemap: https://rpix.top/sitemap.xml
+Disallow: /admin
+Disallow: /members
+
+Sitemap: https://rpix.studio/sitemap-index.xml

@@ -1,0 +1,98 @@
+---
+interface Props {
+  label?: string;
+  aspect?: 'cinema' | 'wide' | 'photo' | 'portrait' | 'square' | 'story' | string;
+  class?: string;
+  gold?: boolean;
+  src?: string;
+  alt?: string;
+}
+
+const {
+  label = 'RPIX',
+  aspect = 'wide',
+  class: className = '',
+  gold = false,
+  src,
+  alt = label,
+} = Astro.props;
+
+const aspectClass =
+  {
+    cinema: 'aspect-cinema',
+    wide: 'aspect-wide',
+    photo: 'aspect-photo',
+    portrait: 'aspect-portrait',
+    square: 'aspect-square',
+    story: 'aspect-story',
+  }[aspect] ?? '';
+
+const style =
+  aspect && !aspectClass
+    ? `aspect-ratio: ${aspect}`
+    : undefined;
+---
+
+<div
+  class:list={['media-placeholder', aspectClass, className, gold && 'media-gold']}
+  data-label={src ? undefined : label}
+  style={style}
+>
+  {
+    src ? (
+      <img src={src} alt={alt} loading="lazy" decoding="async" />
+    ) : (
+      <div class="media-art" aria-hidden="true">
+        <div class="media-art-orb" />
+        <div class="media-art-line" />
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .media-art {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .media-art-orb {
+    position: absolute;
+    width: 40%;
+    height: 40%;
+    top: 20%;
+    left: 30%;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 35% 35%,
+      rgba(201, 168, 76, 0.15),
+      rgba(201, 168, 76, 0.02) 50%,
+      transparent 70%
+    );
+    filter: blur(20px);
+  }
+
+  .media-art-line {
+    position: absolute;
+    bottom: 22%;
+    left: 15%;
+    right: 15%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(201, 168, 76, 0.2),
+      transparent
+    );
+  }
+
+  .media-gold .media-art-orb {
+    background: radial-gradient(
+      circle at 35% 35%,
+      rgba(201, 168, 76, 0.28),
+      rgba(201, 168, 76, 0.05) 50%,
+      transparent 70%
+    );
+  }
+</style>

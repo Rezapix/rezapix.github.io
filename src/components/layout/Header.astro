@@ -1,0 +1,197 @@
+---
+import { SITE } from '@/data/site';
+
+const pathname = Astro.url.pathname;
+---
+
+<header
+  data-header
+  class="fixed top-0 inset-x-0 z-[200] transition-all duration-500"
+  style="height: var(--header-height);"
+>
+  <div
+    class="header-inner container-rpix h-full flex items-center justify-between"
+  >
+    <!-- Logo -->
+    <a
+      href="/"
+      class="relative z-10 flex items-center gap-3 group"
+      data-magnetic
+      data-cursor="Home"
+      aria-label="RPIX Home"
+    >
+      <span
+        class="font-[family-name:var(--font-display)] text-[1.125rem] tracking-[0.35em] font-medium transition-colors duration-300 group-hover:text-[var(--rpix-gold)]"
+      >
+        RPIX
+      </span>
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden lg:flex items-center gap-1" aria-label="Primary">
+      {
+        SITE.navigation.map((item) => (
+          <div class="relative group/nav">
+            <a
+              href={item.href}
+              class:list={[
+                'px-4 py-2 text-[0.8125rem] tracking-wide transition-colors duration-300',
+                pathname === item.href || pathname.startsWith(item.href + '/')
+                  ? 'text-[var(--rpix-fg)]'
+                  : 'text-[var(--rpix-muted-fg)] hover:text-[var(--rpix-fg)]',
+              ]}
+              data-magnetic
+            >
+              {item.label}
+            </a>
+            {item.children && (
+              <div class="pointer-events-none absolute top-full left-1/2 -translate-x-1/2 pt-3 opacity-0 translate-y-2 group-hover/nav:pointer-events-auto group-hover/nav:opacity-100 group-hover/nav:translate-y-0 transition-all duration-300">
+                <div class="glass-strong rounded-xl py-2 min-w-[200px] shadow-2xl">
+                  {item.children.map((child) => (
+                    <a
+                      href={child.href}
+                      class="block px-4 py-2.5 text-[0.8125rem] text-[var(--rpix-muted-fg)] hover:text-[var(--rpix-fg)] hover:bg-white/[0.03] transition-colors"
+                    >
+                      {child.label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        ))
+      }
+    </nav>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-2 relative z-10">
+      <a
+        href="/search"
+        class="btn-icon hidden sm:inline-flex"
+        aria-label="Search"
+        data-magnetic
+        data-cursor="Search"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="7" />
+          <path d="M20 20l-3-3" stroke-linecap="round" />
+        </svg>
+      </a>
+
+      <a
+        href="/contact"
+        class="btn btn-primary btn-sm hidden md:inline-flex"
+        data-magnetic
+        data-cursor="Contact"
+      >
+        Start a Project
+      </a>
+
+      <!-- Mobile toggle -->
+      <button
+        type="button"
+        class="btn-icon lg:hidden"
+        data-nav-toggle
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+      >
+        <span class="nav-toggle-icon flex flex-col gap-[5px] w-4">
+          <span class="block h-px w-full bg-current transition-transform duration-300 origin-center"></span>
+          <span class="block h-px w-full bg-current transition-opacity duration-300"></span>
+          <span class="block h-px w-full bg-current transition-transform duration-300 origin-center"></span>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Nav -->
+  <div
+    id="mobile-nav"
+    data-mobile-nav
+    class="mobile-nav fixed inset-0 z-[-1] bg-[var(--rpix-bg)] opacity-0 pointer-events-none transition-opacity duration-500 lg:hidden"
+    aria-hidden="true"
+  >
+    <div class="container-rpix pt-28 pb-12 h-full flex flex-col">
+      <nav class="flex flex-col gap-1" aria-label="Mobile">
+        {
+          SITE.navigation.map((item, i) => (
+            <div style={`--i: ${i}`}>
+              <a
+                href={item.href}
+                class="mobile-link block text-display py-3 border-b border-[var(--rpix-border)]"
+              >
+                {item.label}
+              </a>
+              {item.children && (
+                <div class="flex flex-wrap gap-x-6 gap-y-2 py-3 pl-1">
+                  {item.children.map((child) => (
+                    <a
+                      href={child.href}
+                      class="text-[0.875rem] text-[var(--rpix-muted-fg)] hover:text-[var(--rpix-gold)]"
+                    >
+                      {child.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))
+        }
+      </nav>
+      <div class="mt-auto flex flex-col gap-4">
+        <a href="/search" class="text-[var(--rpix-muted-fg)] text-sm">Search</a>
+        <a href="/contact" class="btn btn-primary w-full">Start a Project</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  [data-header] .header-inner {
+    transition: background 0.4s var(--ease-out-expo);
+  }
+
+  [data-header].is-scrolled {
+    background: rgba(5, 5, 5, 0.72);
+    backdrop-filter: blur(20px) saturate(1.3);
+    -webkit-backdrop-filter: blur(20px) saturate(1.3);
+    border-bottom: 1px solid rgba(245, 242, 235, 0.06);
+  }
+
+  body.menu-open .mobile-nav {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 150;
+  }
+
+  body.menu-open .nav-toggle-icon span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+  body.menu-open .nav-toggle-icon span:nth-child(2) {
+    opacity: 0;
+  }
+  body.menu-open .nav-toggle-icon span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  .mobile-link {
+    font-size: clamp(2rem, 8vw, 3rem);
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 0.5s var(--ease-out-expo),
+      transform 0.5s var(--ease-out-expo),
+      color 0.3s ease;
+    transition-delay: calc(var(--i, 0) * 60ms + 100ms);
+  }
+
+  body.menu-open .mobile-link {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .mobile-link:hover {
+    color: var(--rpix-gold);
+  }
+</style>

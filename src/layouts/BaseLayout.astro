@@ -1,0 +1,107 @@
+---
+import '@/styles/global.css';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+import Runtime from '@/components/effects/Runtime.astro';
+import { SITE } from '@/data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+  bare?: boolean;
+  bodyClass?: string;
+  ogType?: string;
+}
+
+const {
+  title,
+  description = SITE.description,
+  image = '/og/default.jpg',
+  noindex = false,
+  bare = false,
+  bodyClass = '',
+  ogType = 'website',
+} = Astro.props;
+
+const pageTitle = title ? `${title} — ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+---
+
+<!doctype html>
+<html lang={SITE.locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(image, SITE.url).href} />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(image, SITE.url).href} />
+
+    <!-- Theme -->
+    <meta name="theme-color" content="#050505" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="msapplication-TileColor" content="#050505" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Fonts — premium system stack + optional remote -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <style is:inline>
+      :root {
+        --font-display: "Inter", "Helvetica Neue", "SF Pro Display", system-ui, sans-serif;
+        --font-body: "Inter", "Helvetica Neue", "SF Pro Text", system-ui, sans-serif;
+        --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+      }
+    </style>
+
+    <slot name="head" />
+  </head>
+  <body class:list={['min-h-dvh flex flex-col antialiased', bodyClass]}>
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[10000] focus:bg-[var(--rpix-gold)] focus:text-black focus:px-4 focus:py-2 focus:rounded"
+    >
+      Skip to content
+    </a>
+
+    {!bare && <div class="scroll-progress" aria-hidden="true" />}
+    {!bare && <Header />}
+
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+
+    {!bare && <Footer />}
+    {!bare && <Runtime />}
+    {bare && <slot name="runtime" />}
+  </body>
+</html>
