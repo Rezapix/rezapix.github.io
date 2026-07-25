@@ -1,3 +1,0 @@
-# RPIX Cloudflare Pages redirects
-/admin/  /admin  200
-/rss  /rss.xml  301
