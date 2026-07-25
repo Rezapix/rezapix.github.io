@@ -2,7 +2,7 @@
   "name": "rpix",
   "type": "module",
   "version": "1.0.0",
-  "description": "RPIX — Premium Creative Operating System",
+  "description": "RPIX \u2014 Premium Creative Operating System",
   "author": "RPIX Studio",
   "license": "UNLICENSED",
   "engines": {
@@ -10,11 +10,12 @@
   },
   "scripts": {
     "dev": "astro dev --host",
-    "build": "astro build",
+    "build": "node scripts/generate-covers.mjs && astro build",
     "preview": "astro preview --host",
     "astro": "astro",
     "typecheck": "astro check",
-    "lint": "astro check"
+    "lint": "astro check",
+    "generate:covers": "node scripts/generate-covers.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.1",
@@ -27,11 +28,13 @@
     "date-fns": "^4.4.0",
     "gray-matter": "^4.0.3",
     "gsap": "^3.15.0",
+    "i18next": "^26.3.6",
     "lenis": "^1.3.25",
     "markdown-it": "^14.3.0",
     "nanoid": "^5.1.5",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "react-i18next": "^17.0.10",
     "reading-time": "^1.5.0",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.3",
